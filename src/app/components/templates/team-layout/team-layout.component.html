@@ -1,0 +1,9 @@
+<div class="d-flex flex-column min-vh-100">
+    <app-header [nombreEquipo]="nombreEquipo" [temporada]="temporada"></app-header>
+
+    <main class="container py-4 flex-grow-1">
+        <ng-content></ng-content>
+    </main>
+
+    <app-footer [nombreEquipo]="nombreEquipo"></app-footer>
+</div>

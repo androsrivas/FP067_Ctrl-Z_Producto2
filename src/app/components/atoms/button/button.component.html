@@ -1,0 +1,8 @@
+<button 
+    [type]="type" 
+    class="btn btn-accent d-inline-flex align-items-center justify-content-center gap-2"
+    [class.w-100]="fullWidth" 
+    (click)="onClick.emit($event)">
+    <span><ng-content></ng-content></span>
+    <span  aria-hidden="true">&rarr;</span>
+</button>

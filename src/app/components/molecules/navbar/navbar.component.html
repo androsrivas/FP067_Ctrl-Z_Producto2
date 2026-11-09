@@ -1,0 +1,5 @@
+<nav class class="molecula-navbar" aria-label="Navegación principal">
+    <app-nav-link *ngFor="let item of items" [label]="item"
+        [active]="item === active" (linkClick)="select($event)"
+    ></app-nav-link>
+</nav>

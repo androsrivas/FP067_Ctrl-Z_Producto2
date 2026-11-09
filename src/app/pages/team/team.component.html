@@ -1,0 +1,51 @@
+<app-team-layout>
+
+  <!-- Cabecera de página -->
+  <div class="page-header">
+    <div>
+      <nav class="small text-body-secondary mb-1">Primer equipo / Plantilla</nav>
+      <h1 class="page-title fs-2 mb-1">Nuestra plantilla</h1>
+      <p class="text-body-secondary mb-0">
+        Conoce a los jugadores, sus estadísticas y sus mejores jugadas.
+      </p>
+    </div>
+
+    <div class="border rounded-3 bg-white px-3 py-2 d-none d-md-block">
+      <div class="fw-semibold">{{ totalJugadores }} jugadores</div>
+      <small class="text-body-secondary">Plantilla activa seleccionada</small>
+    </div>
+  </div>
+
+  <!-- Filtro -->
+  <app-filter-bar (searchChange)="searchText = $event" (sortChange)="sortBy = $event"></app-filter-bar>
+
+  <div class="row g-4">
+
+    <!-- Columna izquierda: lista -->
+    <section class="col-12 col-lg-7">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="page-title fs-5 mb-0">
+          Jugadores <app-badge [label]="totalFiltrados"></app-badge>
+        </h2>
+        <span class="text-sorting">Ordenados por {{ sortLabel }}</span>
+      </div>
+
+      <app-players-list [searchText]="searchText" [sortBy]="sortBy" [selectedId]="selectedPlayer?.id ?? null"
+        (playerSelected)="selectedPlayer = $event"></app-players-list>
+
+      <p class="text-footer">Mostrando los {{ totalFiltrados }} jugadores de la plantilla</p>
+    </section>
+
+    <!-- Columna derecha: detalle + vídeo -->
+    <aside class="col-12 col-lg-5">
+      <h2 class="page-title fs-5 mb-3">Detalle del jugador</h2>
+
+      <div class="d-flex flex-column gap-4">
+        <app-player-detail [player]="selectedPlayer" (closed)="selectedPlayer = null"></app-player-detail>
+
+        <app-player-media [player]="selectedPlayer"></app-player-media>
+      </div>
+    </aside>
+
+  </div>
+</app-team-layout>

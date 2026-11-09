@@ -1,0 +1,43 @@
+<section class="card media-card" *ngIf="player">
+  <div class="media-header">
+    <div>
+      <h3 class="media-title">En la cancha</h3>
+      <p class="media-subtitle">
+        {{ player.nombre }} {{ player.apellidos }}
+        · #{{ player.dorsal }} · {{ player.posicion }}
+      </p>
+    </div>
+    <span class="media-count">{{ totalVideos | number:'2.0-0' }} vídeos</span>
+  </div>
+
+  <div class="media-video-container">
+    <video
+      *ngIf="playing && player.videoUrl; else placeholder"
+      [src]="player.videoUrl"
+      controls
+      autoplay
+      preload="metadata"
+      playsinline>
+      Tu navegador no soporta la reproducción de vídeo.
+    </video>
+
+    <ng-template #placeholder>
+      <div class="card-media-placeholder" (click)="onPlay()">
+        <button type="button" class="play-button"
+                aria-label="Reproducir vídeo"
+                [disabled]="!player.videoUrl">
+          <svg viewBox="0 0 24 24" class="play-icon">
+            <path d="M8 5v14l11-7z" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <p *ngIf="descripcion" class="media-description">{{ descripcion }}</p>
+
+  <div class="media-footer">
+    <span>Jugadas destacadas</span>
+    <span class="player-tag">#{{ player.dorsal }}</span>
+  </div>
+</section>

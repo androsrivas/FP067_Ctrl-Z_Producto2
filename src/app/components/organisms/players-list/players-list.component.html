@@ -1,0 +1,12 @@
+<ng-container *ngIf="players | filterPlayers: searchText : position | sortPlayers: sortBy as filtered">
+    <div *ngIf="filtered.length > 0; else empty" class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-3">
+        <div class="col" *ngFor="let player of filtered; trackBy: trackById">
+            <app-player-card [player]="player" [selected]="player.id === selectedId" (cardClick)="select($event)">
+            </app-player-card>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #empty>
+    <p class="text-muted text-center my-3">No hay jugadores.</p>
+</ng-template>

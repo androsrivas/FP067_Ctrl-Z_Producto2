@@ -1,0 +1,11 @@
+<div class="player-card h-100" [class.selected]="selected" (click)="cardClick.emit(player)">
+    <div class="card-media ratio ratio-4x3 rounded-3 overflow-hidden mb-3">
+        <img *ngIf="player.foto" [src]="player.foto" [alt]="player.nombre" class="object-fit-cover" />
+    </div>
+    <h3 class="card-title">#{{ player.dorsal }} {{ player.nombre }} {{ player.apellidos }}</h3>
+    <div class="card-meta">
+        <span class="card-position">{{ player.posicion }}</span>
+        <span class="card-details">{{ player.edad }} años · {{ player.altura }} m</span>
+    </div>
+    <app-button class="mt-auto">Ver detalle</app-button>
+</div>

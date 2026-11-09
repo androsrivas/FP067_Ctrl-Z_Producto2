@@ -1,0 +1,5 @@
+:host { display: block; }
+
+.avatar { width: 72px; height: 72px; background: var(--color-media-placeholder); }
+
+.player-card:hover { border-color: var(--color-border); box-shadow: none; }
