@@ -31,7 +31,7 @@ El objetivo de este producto es convertir la aplicación en una aplicación real
 La aplicación mantiene el diseño atómico del Producto 1 y añade una capa de servicio para el acceso a Firebase, inyectada en los componentes mediante el sistema de inyección de dependencias de Angular (`@Injectable({ providedIn: 'root' })`):
 
 ```text
-FP067_Ctrl-Z_Producto2/
+FP067_CtrlZ_Producto2/
 │
 ├── src/
 │   ├── app/
