@@ -23,7 +23,8 @@ export class PlayerService {
       collection(this.firestore, 'players');
 
     return collectionData(
-      playersCollection
+      playersCollection,
+      { idField: 'firebaseId' }
     ) as Observable<Player[]>;
   }
 }

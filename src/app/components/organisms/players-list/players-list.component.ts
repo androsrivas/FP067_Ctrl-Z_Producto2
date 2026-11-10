@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PlayerCardComponent } from '../../molecules/player-card/player-card.component';
 import { Player } from '../../../models/player.model';
-import { PLAYERS_DATA } from '../../../data/players.mock';
+
 import { FilterPlayersPipe } from '../../../pipes/filter-players.pipe';
 import { SortPlayersPipe } from '../../../pipes/sort-players.pipe';
 
@@ -14,7 +14,7 @@ import { SortPlayersPipe } from '../../../pipes/sort-players.pipe';
   styleUrl: './players-list.component.css'
 })
 export class PlayersListComponent {
-  players: Player[] = PLAYERS_DATA;
+  @Input() players: Player[] = [];
 
   @Input() searchText = '';
   @Input() position = '';
