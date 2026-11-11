@@ -1,12 +1,27 @@
-<ng-container *ngIf="players | filterPlayers: searchText : position | sortPlayers: sortBy as filtered">
-    <div *ngIf="filtered.length > 0; else empty" class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-3">
-        <div class="col" *ngFor="let player of filtered; trackBy: trackById">
-            <app-player-card [player]="player" [selected]="player.id === selectedId" (cardClick)="select($event)">
-            </app-player-card>
-        </div>
-    </div>
-</ng-container>
+<div
+  class="row g-3"
+  *ngIf="players.length > 0"
+>
+  <div
+    class="col-12 col-md-6"
+    *ngFor="
+      let player of (
+        players
+        | filterPlayers: searchText : position
+        | sortPlayers: sortBy
+      );
+      trackBy: trackById
+    "
+  >
+    <app-player-card
+      [player]="player"
+      [selected]="selectedId === player.id"
+      (cardClick)="select($event)"
+    >
+    </app-player-card>
+  </div>
+</div>
 
-<ng-template #empty>
-    <p class="text-muted text-center my-3">No hay jugadores.</p>
-</ng-template>
+<div *ngIf="players.length === 0">
+  No hay jugadores disponibles.
+</div>
