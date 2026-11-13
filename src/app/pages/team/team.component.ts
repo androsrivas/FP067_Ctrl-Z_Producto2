@@ -64,6 +64,19 @@ export class TeamComponent {
   });
 }
 
+deletePlayer(player: Player): void {
+
+  const confirmed = confirm(
+    `¿Seguro que deseas eliminar a ${player.nombre} ${player.apellidos}?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  console.log('Eliminar jugador:', player);
+}
+
   get sortLabel(): string {
     return this.sortLabels[this.sortBy] ?? '';
   }
