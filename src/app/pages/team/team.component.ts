@@ -47,7 +47,18 @@ export class TeamComponent {
   constructor() {
   this.playerService.getPlayers().subscribe((players: Player[]) => {
 
-    console.log('JUGADORES FIREBASE:', players);
+    players.forEach(player => {
+      console.log(
+        'ID:',
+        player.id,
+        'NOMBRE:',
+        player.nombre,
+        'APELLIDOS:',
+        player.apellidos,
+        'DORSAL:',
+        player.dorsal
+      );
+    });
 
     this.players = players;
   });
