@@ -34,6 +34,7 @@ export class TeamComponent {
 
   searchText = '';
   sortBy = 'position';
+  positionFilter = '';
 
   private readonly playerService = inject(PlayerService);
   private readonly filterPipe = new FilterPlayersPipe();
