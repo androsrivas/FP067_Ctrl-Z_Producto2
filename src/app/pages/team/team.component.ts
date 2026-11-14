@@ -64,7 +64,7 @@ export class TeamComponent {
   });
 }
 
-deletePlayer(player: Player): void {
+async deletePlayer(player: Player): Promise<void> {
 
   const confirmed = confirm(
     `¿Seguro que deseas eliminar a ${player.nombre} ${player.apellidos}?`
@@ -74,7 +74,27 @@ deletePlayer(player: Player): void {
     return;
   }
 
-  console.log('Eliminar jugador:', player);
+  try {
+
+    await this.playerService.deletePlayer(
+      (player as any).firebaseId
+    );
+
+    console.log(
+      `${player.nombre} eliminado correctamente`
+    );
+
+  } catch (error) {
+
+    console.error(
+      'Error eliminando jugador:',
+      error
+    );
+
+    alert(
+      'No se ha podido eliminar el jugador'
+    );
+  }
 }
 
   get sortLabel(): string {

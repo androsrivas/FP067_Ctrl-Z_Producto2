@@ -1,11 +1,13 @@
 export interface Player {
+    firebaseId?: string;
+
     id: number;
     nombre: string;
     apellidos: string;
     dorsal: number;
     posicion: string;
     edad: number;
-    altura: number; //en metros (ex: 1.88)
+    altura: number;
     nacionalidad: string;
     puntos: number;
     asistencias: number;
