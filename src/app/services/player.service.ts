@@ -1,14 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 
-import {
-  Firestore,
-  collection,
-  collectionData
-} from '@angular/fire/firestore';
-
 import { Observable } from 'rxjs';
 
 import { Player } from '../models/player.model';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  deleteDoc
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,16 @@ export class PlayerService {
       collection(this.firestore, 'players');
 
     return collectionData(
-      playersCollection
+      playersCollection,
+      { idField: 'firebaseId' }
     ) as Observable<Player[]>;
+  }
+  async deletePlayer(firebaseId: string): Promise<void> {
+  const playerDoc = doc(
+    this.firestore,
+    `players/${firebaseId}`
+  );
+
+  await deleteDoc(playerDoc);
   }
 }

@@ -11,6 +11,7 @@ import { InputComponent } from '../../atoms/input/input.component';
 export class FilterBarComponent {
   @Output() searchChange = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
+  @Output() positionChange = new EventEmitter<string>();
 
   onSortSelect(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;

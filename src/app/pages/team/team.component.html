@@ -30,8 +30,14 @@
         <span class="text-sorting">Ordenados por {{ sortLabel }}</span>
       </div>
 
-      <app-players-list [searchText]="searchText" [sortBy]="sortBy" [selectedId]="selectedPlayer?.id ?? null"
-        (playerSelected)="selectedPlayer = $event"></app-players-list>
+      <app-players-list
+      [players]="players"
+      [searchText]="searchText"
+      [sortBy]="sortBy"
+      [selectedId]="selectedPlayer?.id ?? null"
+      (playerSelected)="selectedPlayer = $event"
+      (playerDeleted)="deletePlayer($event)">
+      </app-players-list>
 
       <p class="text-footer">Mostrando los {{ totalFiltrados }} jugadores de la plantilla</p>
     </section>

@@ -31,7 +31,12 @@ export class FilterPlayersPipe implements PipeTransform {
     const pos = normalize(position);
 
     return players?.filter(player => {
-      const matchesText = !query || normalize(`${player.nombre} ${player.apellidos}`).includes(query);
+      const searchableText = normalize(
+  `${player.nombre} ${player.apellidos} ${player.posicion}`
+);
+  const matchesText =
+  !query ||
+  searchableText.includes(query);
       const matchesPosition = !pos || normalize(player.posicion) === pos;
       return matchesText && matchesPosition; 
     });
