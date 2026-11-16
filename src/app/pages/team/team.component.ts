@@ -28,8 +28,7 @@ import { PlayerService } from '../../services/player.service';
   styleUrl: './team.component.css',
 })
 export class TeamComponent {
-
-  selectedPlayer: Player | null = null;
+  selectedId: number | null = null;
   players: Player[] = [];
 
   searchText = '';
@@ -41,17 +40,18 @@ export class TeamComponent {
   private readonly sortLabels: Record<string, string> = {
     position: 'posición',
     name: 'nombre',
-    age: 'edad'
+    age: 'edad',
   };
 
   constructor() {
-  this.playerService.getPlayers().subscribe((players: Player[]) => {
+    this.playerService.getPlayers().subscribe((players: Player[]) => {
+      this.players = players;
+    });
+  }
 
-    console.log('JUGADORES FIREBASE:', players);
-
-    this.players = players;
-  });
-}
+  get selectedPlayer(): Player | null {
+    return this.players.find(p => p.id === this.selectedId) ?? null;
+  }
 
   get sortLabel(): string {
     return this.sortLabels[this.sortBy] ?? '';
@@ -62,9 +62,6 @@ export class TeamComponent {
   }
 
   get totalFiltrados(): number {
-    return this.filterPipe.transform(
-      this.players,
-      this.searchText
-    ).length;
+    return this.filterPipe.transform(this.players, this.searchText).length;
   }
 }

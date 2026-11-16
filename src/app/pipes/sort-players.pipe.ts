@@ -3,8 +3,8 @@ import { Player } from '../models/player.model';
 
 const POISITION_ORDER = ['base', 'escolta', 'alero', 'ala-pivot', 'pivot'];
 
-function normalize(value: string): string {
-  return value
+function normalize(value: string | null | undefined): string {
+  return (value ?? '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLocaleLowerCase()

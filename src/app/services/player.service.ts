@@ -3,7 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   collection,
-  collectionData
+  collectionData,
+  doc,
+  updateDoc
 } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
@@ -26,5 +28,11 @@ export class PlayerService {
       playersCollection,
       { idField: 'firebaseId' }
     ) as Observable<Player[]>;
+  }
+
+  updatePlayer(firebaseId: string, data: Partial<Player>): Promise<void> {
+    const { firebaseId: _, ...fields } = data;
+    const playerRef = doc(this.firestore, 'players', firebaseId);
+    return updateDoc(playerRef, fields);
   }
 }

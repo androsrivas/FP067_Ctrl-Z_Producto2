@@ -31,7 +31,7 @@
       </div>
 
       <app-players-list [players]="players" [searchText]="searchText" [sortBy]="sortBy" 
-      [selectedId]="selectedPlayer?.id ?? null" (playerSelected)="selectedPlayer = $event">
+      [selectedId]="selectedId" (playerSelected)="selectedId = $event.id">
       </app-players-list>
 
       <p class="text-footer">Mostrando los {{ totalFiltrados }} jugadores de la plantilla</p>
@@ -42,7 +42,7 @@
       <h2 class="page-title fs-5 mb-3">Detalle del jugador</h2>
 
       <div class="d-flex flex-column gap-4">
-        <app-player-detail [player]="selectedPlayer" (closed)="selectedPlayer = null"></app-player-detail>
+        <app-player-detail [player]="selectedPlayer" (closed)="selectedId = null"></app-player-detail>
 
         <app-player-media [player]="selectedPlayer"></app-player-media>
       </div>

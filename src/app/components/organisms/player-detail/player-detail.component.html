@@ -14,7 +14,17 @@
                     <p class="card-position small mb-0">{{ player.posicion }} · Primer equipo</p>
         </div>
 
-        <button type="button" class="btn-close" aria-label="Cerrar detalle" (click)="close()"></button>
+        <div class="d-flex align-items-center gap-2">
+            <button *ngIf="!editing" type="button" class="btn btn-sm btn-outline-primary" (click)="startEdit()">
+                Editar
+            </button>
+            <button type="button" class="btn-close" aria-label="Cerrar detalle" (click)="close()"></button>
+        </div>
+    </div>
+
+    <!-- Mensaje de confirmación / error -->
+    <div *ngIf="message" class="alert py-2 mb-0" [ngClass]="'alert-' + message.type" role="alert">
+        {{ message.text }}
     </div>
 
     <!-- Info personal -->
@@ -25,13 +35,20 @@
         </div>
     </div>
 
-    <!-- Promedios -->
-    <div class="d-flex justify-content-between align-items-center">
-        <span class="fw-semibold">Promedios por partido</span>
-        <span class="text-sorting">2026 / 2027</span>
-    </div>
+    <!-- MODO LECTURA -->
+    <ng-container *ngIf="!editing; else editForm">
+        <div class="row row-cols-3 g-0 border-top border-bottom py-3">
+            <div class="col" *ngFor="let item of personalInfo">
+                <div class="card-details small">{{ item.label }}</div>
+                <div class="fw-semibold">{{ item.value }}</div>
+            </div>
+        </div>
 
-    <div class="row row-cols-3 g-2 text-center">
+        <!-- Promedios -->
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">Promedios por partido</span>
+            <span class="text-sorting">2026 / 2027</span>
+        </div>
         <div class="col">
             <div class="border rounded-3 p-3">
                 <app-stat-card [value]="player.puntos" label="Puntos"></app-stat-card>
@@ -47,9 +64,53 @@
                 <app-stat-card [value]="player.rebotes" label="Rebotes"></app-stat-card>
             </div>
         </div>
-    </div>
+        <p *ngIf="player.biografia" class="card-details mb-0">{{ player.biografia }}</p>
+    </ng-container>
 
-    <p *ngIf="player.biografia" class="card-details mb-0">{{ player.biografia }}</p>
+    <!-- MODO EDICIÓN -->
+    <ng-template #editForm>
+        <form [formGroup]="form" (ngSubmit)="save()" novalidate class="row g-2 border-top pt-3">
+
+            <div class="col-6" *ngFor="let f of textFields">
+                <label class="form-label small mb-1" [for]="'edit-' + f.name">{{ f.label }}</label>
+                <input type="text" class="form-control form-control-sm" [id]="'edit-' + f.name"
+                    [formControlName]="f.name" [class.is-invalid]="isInvalid(f.name)">
+                <div class="invalid-feedback">Campo obligatorio.</div>
+            </div>
+
+            <div class="col-6">
+                <label class="form-label small mb-1" for="edit-posicion">Posición</label>
+                <select id="edit-posicion" class="form-select form-select-sm" formControlName="posicion"
+                    [class.is-invalid]="isInvalid('posicion')">
+                    <option value="" disabled>Selecciona una posición.</option>
+                    <option *ngFor="let p of posiciones" [value]="p">{{ p }}</option>
+                </select>
+                <div class="invalid-feedback">Selecciona una posición.</div>
+            </div>
+
+            <div class="col-4" *ngFor="let f of numberFields">
+                <label class="form-label small mb-1" [for]="'edit-' + f.name">{{ f.label }}</label>
+                <input type="number" class="form-control form-control-sm" [id]="'edit-' + f.name"
+                    [formControlName]="f.name" [step]="f.step" [class.is-invalid]="isInvalid(f.name)">
+                <div class="invalid-feedback">{{ f.error }}</div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label small mb-1" for="edit-biografia">Biografía</label>
+                <textarea id="edit-biografia" rows="3" class="form-control form-control-sm"
+                    formControlName="biografia"></textarea>
+            </div>
+
+            <div class="col-12 -flex justify-content-end gap-2 mt-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cancel()" [disabled]="saving">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-sm btn-primary" [disabled]="saving">
+                    {{ saving ? 'Guardando...' : 'Guardar' }}
+                </button>
+            </div>
+        </form>
+    </ng-template>
 </div>
 
 <ng-template #noPlayer>

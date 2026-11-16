@@ -1,5 +1,6 @@
 export interface Player {
     id: number;
+    firebaseId?: string;
     nombre: string;
     apellidos: string;
     dorsal: number;
