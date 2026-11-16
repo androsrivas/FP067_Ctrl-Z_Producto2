@@ -13,6 +13,11 @@ import {
   getFirestore
 } from '@angular/fire/firestore';
 
+import {
+  provideStorage,
+  getStorage
+} from '@angular/fire/storage';
+
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
@@ -25,6 +30,10 @@ export const appConfig: ApplicationConfig = {
 
     provideFirestore(() =>
       getFirestore()
+    ),
+
+    provideStorage(() =>
+      getStorage()
     )
   ]
 };

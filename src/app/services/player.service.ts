@@ -8,6 +8,13 @@ import {
   updateDoc
 } from '@angular/fire/firestore';
 
+import {
+  Storage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from '@angular/fire/storage';
+
 import { Observable } from 'rxjs';
 
 import { Player } from '../models/player.model';
@@ -18,6 +25,7 @@ import { Player } from '../models/player.model';
 export class PlayerService {
 
   private firestore: Firestore = inject(Firestore);
+  private storage: Storage = inject(Storage);
 
   getPlayers(): Observable<Player[]> {
 
@@ -34,5 +42,12 @@ export class PlayerService {
     const { firebaseId: _, ...fields } = data;
     const playerRef = doc(this.firestore, 'players', firebaseId);
     return updateDoc(playerRef, fields);
+  }
+
+  async uploadFile(file: File, folder: 'images' | 'videos'): Promise<string> {
+    const path = `players/${folder}/${Date.now()}_${file.name}`;
+    const fileRef = ref(this.storage, path);
+    await uploadBytes(fileRef, file, { contentType: file.type });
+    return getDownloadURL(fileRef);
   }
 }
