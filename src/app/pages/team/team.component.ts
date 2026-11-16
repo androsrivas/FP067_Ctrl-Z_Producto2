@@ -62,7 +62,19 @@ export class TeamComponent {
     });
 
     this.players = players;
+
+    if (this.selectedPlayer) {
+
+      const updatedPlayer = players.find(
+        player => player.id === this.selectedPlayer!.id
+      );
+
+      if (updatedPlayer) {
+        this.selectedPlayer = updatedPlayer;
+      }
+    }
   });
+
 }
 
 async deletePlayer(player: Player): Promise<void> {
