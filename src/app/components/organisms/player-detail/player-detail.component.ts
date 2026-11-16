@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../../models/player.model';
 import { PlayerMediaComponent } from '../player-media/player-media.component';
@@ -29,23 +36,45 @@ export class PlayerDetailComponent {
   saving = false;
   message: { type: 'success' | 'danger'; text: string } | null = null;
 
+  imageFile: File | null = null;
+  videoFile: File | null = null;
+  fileError: string | null = null;
+
+  private readonly fileLimits = {
+    image: { type: 'image/', maxMb: 5, label: 'La imagen' },
+    video: { type: 'video/', maxMb: 50, label: 'El vídeo' },
+  };
+
   readonly posiciones = ['Base', 'Escolta', 'Alero', 'Ala-pívot', 'Pívot'];
 
   readonly textFields = [
     { name: 'nombre', label: 'Nombre' },
     { name: 'apellidos', label: 'Apellidos' },
     { name: 'nacionalidad', label: 'Nacionalidad' },
-    { name: 'foto', label: 'Foto (ruta o URL)' },
-    { name: 'videoUrl', label: 'Vídeo (ruta o URL)' },
   ];
 
   readonly numberFields = [
     { name: 'dorsal', label: 'Dorsal', step: 1, error: 'Entre 0 y 99.' },
     { name: 'edad', label: 'Edad', step: 1, error: 'Entre 15 y 50.' },
-    { name: 'altura', label: 'Altura (m)', step: 0.01, error: 'Entre 1 y 2,5m.' },
+    {
+      name: 'altura',
+      label: 'Altura (m)',
+      step: 0.01,
+      error: 'Entre 1 y 2,5m.',
+    },
     { name: 'puntos', label: 'Puntos', step: 0.1, error: 'Debe ser 0 o más.' },
-    { name: 'asistencias', label: 'Asistencias', step: 0.1, error: 'Debe ser 0 o más.' },
-    { name: 'rebotes', label: 'Rebotes', step: 0.1, error: 'Debe ser 0 o más.' },
+    {
+      name: 'asistencias',
+      label: 'Asistencias',
+      step: 0.1,
+      error: 'Debe ser 0 o más.',
+    },
+    {
+      name: 'rebotes',
+      label: 'Rebotes',
+      step: 0.1,
+      error: 'Debe ser 0 o más.',
+    },
   ];
 
   form = this.fb.group({
@@ -84,12 +113,20 @@ export class PlayerDetailComponent {
   startEdit(): void {
     if (!this.player) return;
     this.form.reset(this.player);
+    this.resetFiles();
     this.message = null;
     this.editing = true;
   }
 
   cancel(): void {
+    this.resetFiles();
     this.editing = false;
+  }
+
+  private resetFiles(): void {
+    this.imageFile = null;
+    this.videoFile = null;
+    this.fileError = null;
   }
 
   isInvalid(name: string): boolean {
@@ -100,22 +137,65 @@ export class PlayerDetailComponent {
   async save(): Promise<void> {
     if (!this.player?.firebaseId) return;
 
-    if (this.form.invalid) {
+    if (this.form.invalid || this.fileError) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.saving = true;
     try {
-      await this.playerService.updatePlayer(this.player.firebaseId, this.form.getRawValue() as Partial<Player>);
+      const data = this.form.getRawValue() as Partial<Player>;
+
+      // Primero subimos los archivos a Storage y guardamos la URL en el formulario
+      if (this.imageFile) {
+        data.foto = await this.playerService.uploadFile(this.imageFile, 'images');
+      }
+      if (this.videoFile) {
+        data.videoUrl = await this.playerService.uploadFile(this.videoFile, 'videos');
+      }
+
+      //Luego guardaos todos los datos (con las URL nuevas) en Firestore
+      await this.playerService.updatePlayer(
+        this.player.firebaseId,
+        data
+      );
+      this.resetFiles();
       this.editing = false;
-      this.message = { type: 'success', text: 'Jugador actualizado correctamente.' };
+      this.message = {
+        type: 'success',
+        text: 'Jugador actualizado correctamente.',
+      };
     } catch (error) {
       console.error(error);
-      this.message = { type: 'danger', text: 'No se ha podido guardar. Inténtalo de nuevo.' };
+      this.message = {
+        type: 'danger',
+        text: 'No se ha podido guardar. Inténtalo de nuevo.',
+      };
     } finally {
       this.saving = false;
     }
+  }
+
+  onFileSelected(event: Event, kind: 'image' | 'video'): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    this.fileError = null;
+
+    if (file) {
+      const { type, maxMb, label } = this.fileLimits[kind];
+      if (!file.type.startsWith(type) || file.size >= maxMb * 1024 * 1024) {
+        this.fileError = `${label} debe ser un archivo ${type}* de menos de ${maxMb} MB.`;
+        input.value = '';
+        this.setFile(kind, null);
+        return;
+      }
+    }
+    this.setFile(kind, file);
+  }
+
+  private setFile(kind: 'image' | 'video', file: File | null): void {
+    if (kind === 'image') this.imageFile = file;
+    else this.videoFile = file;
   }
 
   close(): void {
