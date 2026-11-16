@@ -28,8 +28,7 @@ import { PlayerService } from '../../services/player.service';
   styleUrl: './team.component.css',
 })
 export class TeamComponent {
-
-  selectedPlayer: Player | null = null;
+  selectedId: number | null = null;
   players: Player[] = [];
 
   searchText = '';
@@ -42,71 +41,32 @@ export class TeamComponent {
   private readonly sortLabels: Record<string, string> = {
     position: 'posición',
     name: 'nombre',
-    age: 'edad'
+    age: 'edad',
   };
 
   constructor() {
   this.playerService.getPlayers().subscribe((players: Player[]) => {
-
-    players.forEach(player => {
-      console.log(
-        'ID:',
-        player.id,
-        'NOMBRE:',
-        player.nombre,
-        'APELLIDOS:',
-        player.apellidos,
-        'DORSAL:',
-        player.dorsal
-      );
-    });
-
     this.players = players;
-
-    if (this.selectedPlayer) {
-
-      const updatedPlayer = players.find(
-        player => player.id === this.selectedPlayer!.id
-      );
-
-      if (updatedPlayer) {
-        this.selectedPlayer = updatedPlayer;
-      }
-    }
   });
+}
 
+get selectedPlayer(): Player | null {
+  return this.players.find(p => p.id === this.selectedId) ?? null;
 }
 
 async deletePlayer(player: Player): Promise<void> {
+  if (!player.firebaseId) return;
 
   const confirmed = confirm(
     `¿Seguro que deseas eliminar a ${player.nombre} ${player.apellidos}?`
   );
-
-  if (!confirmed) {
-    return;
-  }
+  if (!confirmed) return;
 
   try {
-
-    await this.playerService.deletePlayer(
-      (player as any).firebaseId
-    );
-
-    console.log(
-      `${player.nombre} eliminado correctamente`
-    );
-
+    await this.playerService.deletePlayer(player.firebaseId);
   } catch (error) {
-
-    console.error(
-      'Error eliminando jugador:',
-      error
-    );
-
-    alert(
-      'No se ha podido eliminar el jugador'
-    );
+    console.error('Error eliminando jugador:', error);
+    alert('No se ha podido eliminar el jugador');
   }
 }
 
@@ -119,9 +79,6 @@ async deletePlayer(player: Player): Promise<void> {
   }
 
   get totalFiltrados(): number {
-    return this.filterPipe.transform(
-      this.players,
-      this.searchText
-    ).length;
+    return this.filterPipe.transform(this.players, this.searchText).length;
   }
 }
