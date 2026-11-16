@@ -5,10 +5,18 @@
   /* Paleta de colores */
   --color-primary: #0f172a;
   --color-accent: #f97316;
+  --color-accent-hover: #ea580c;
+  --color-accent-active: #c2410c;
+  --color-accent-rgb: 249, 115, 22;
   --color-background: #f8fafc;
   --color-surface: #ffffff;
   --color-border: #e2e8f0;
   --color-media-placeholder: #f1f5f9;
+  --color-danger: #dc2626;
+  --color-danger-rgb: 220, 38, 38;
+  --color-danger-bg: #fef2f2;
+  --color-danger-bg-active: #fee2e2;
+  --color-danger-border: #fecaca;
 
   /* Colores de texto */
   --text-primary: #1e293b;
@@ -29,9 +37,12 @@
   /* Transiciones */
   --transition-fast: 0.2s ease-in-out;
 
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.12);
+
   /* Puente hacia Bootstrap */
   --bs-primary: #f97316;
-  --bs-primary-rgb: 249, 115, 22;
+  --bs-primary-rgb: var(--color-accent-rgb);
   --bs-body-font-family: var(--font-family-base);
   --bs-body-bg: var(--color-background);
   --bs-body-color: var(--text-primary);
@@ -43,6 +54,10 @@
   --bs-border-radius-xl: var(--radius-lg);
   --bs-link-color: var(--color-accent);
   --bs-link-color-rgb: 249, 115, 22;
+  --bs-danger: var(--color-danger);
+  --bs-danger-rgb: var(--color-danger-rgb);
+  --bs-form-invalid-color: var(--color-danger);
+  --bs-form-invalid-border-color: var(--color-danger);
 }
 
 /* ==========================================
@@ -144,21 +159,26 @@ body {
   color: var(--text-secondary);
 }
 
-/* Botones Acción (Accent) */
-.btn-accent {
+/* Botones de acción principal: colores compartidos (accent + primary de Bootstrap) */
+.btn-accent,
+.btn-primary {
   --bs-btn-color: var(--text-on-dark);
   --bs-btn-bg: var(--color-accent);
   --bs-btn-border-color: var(--color-accent);
   --bs-btn-hover-color: var(--text-on-dark);
-  --bs-btn-hover-bg: var(--color-accent);
-  --bs-btn-hover-border-color: var(--color-accent);
+  --bs-btn-hover-bg: var(--color-accent-hover);
+  --bs-btn-hover-border-color: var(--color-accent-hover);
   --bs-btn-active-color: var(--text-on-dark);
-  --bs-btn-active-bg: var(--color-accent);
-  --bs-btn-active-border-color: var(--color-accent);
+  --bs-btn-active-bg: var(--color-accent-active);
+  --bs-btn-active-border-color: var(--color-accent-active);
   --bs-btn-disabled-color: var(--text-on-dark);
   --bs-btn-disabled-bg: var(--color-accent);
   --bs-btn-disabled-border-color: var(--color-accent);
-  --bs-btn-focus-shadow-rgb: 249, 115, 22;
+  --bs-btn-focus-shadow-rgb: var(--color-accent-rgb);
+}
+
+/* Tamaño propio del botón accent (app-button) */
+.btn-accent {
   --bs-btn-border-radius: var(--radius-md);
   --bs-btn-font-size: 0.875rem;
   --bs-btn-font-weight: 600;
@@ -166,8 +186,18 @@ body {
   --bs-btn-padding-x: 16px;
 }
 
-.btn-accent:hover {
-  opacity: 0.9;
+.btn-outline-primary {
+  --bs-btn-color: var(--color-accent);
+  --bs-btn-border-color: var(--color-accent);
+  --bs-btn-hover-color: var(--text-on-dark);
+  --bs-btn-hover-bg: var(--color-accent);
+  --bs-btn-hover-border-color: var(--color-accent);
+  --bs-btn-active-color: var(--text-on-dark);
+  --bs-btn-active-bg: var(--color-accent-hover);
+  --bs-btn-active-border-color: var(--color-accent-hover);
+  --bs-btn-disabled-color: var(--color-accent);
+  --bs-btn-disabled-border-color: var(--color-accent);
+  --bs-btn-focus-shadow-rgb: var(--color-accent-rgb);
 }
 
 /* Texto de pie de página */
