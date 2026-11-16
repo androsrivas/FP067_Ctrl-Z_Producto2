@@ -5,7 +5,8 @@ import {
   collection,
   collectionData,
   doc,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from '@angular/fire/firestore';
 
 import {
@@ -28,10 +29,7 @@ export class PlayerService {
   private storage: Storage = inject(Storage);
 
   getPlayers(): Observable<Player[]> {
-
-    const playersCollection =
-      collection(this.firestore, 'players');
-
+    const playersCollection = collection(this.firestore, 'players');
     return collectionData(
       playersCollection,
       { idField: 'firebaseId' }
@@ -44,10 +42,17 @@ export class PlayerService {
     return updateDoc(playerRef, fields);
   }
 
+  async deletePlayer(firebaseId: string): Promise<void> {
+    const playerDoc = doc(this.firestore, `players/${firebaseId}`);
+    await deleteDoc(playerDoc);
+  };
+
   async uploadFile(file: File, folder: 'images' | 'videos'): Promise<string> {
     const path = `players/${folder}/${Date.now()}_${file.name}`;
     const fileRef = ref(this.storage, path);
     await uploadBytes(fileRef, file, { contentType: file.type });
     return getDownloadURL(fileRef);
   }
+
+  
 }

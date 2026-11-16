@@ -33,6 +33,7 @@ export class TeamComponent {
 
   searchText = '';
   sortBy = 'position';
+  positionFilter = '';
 
   private readonly playerService = inject(PlayerService);
   private readonly filterPipe = new FilterPlayersPipe();
@@ -44,14 +45,30 @@ export class TeamComponent {
   };
 
   constructor() {
-    this.playerService.getPlayers().subscribe((players: Player[]) => {
-      this.players = players;
-    });
-  }
+  this.playerService.getPlayers().subscribe((players: Player[]) => {
+    this.players = players;
+  });
+}
 
-  get selectedPlayer(): Player | null {
-    return this.players.find(p => p.id === this.selectedId) ?? null;
+get selectedPlayer(): Player | null {
+  return this.players.find(p => p.id === this.selectedId) ?? null;
+}
+
+async deletePlayer(player: Player): Promise<void> {
+  if (!player.firebaseId) return;
+
+  const confirmed = confirm(
+    `¿Seguro que deseas eliminar a ${player.nombre} ${player.apellidos}?`
+  );
+  if (!confirmed) return;
+
+  try {
+    await this.playerService.deletePlayer(player.firebaseId);
+  } catch (error) {
+    console.error('Error eliminando jugador:', error);
+    alert('No se ha podido eliminar el jugador');
   }
+}
 
   get sortLabel(): string {
     return this.sortLabels[this.sortBy] ?? '';

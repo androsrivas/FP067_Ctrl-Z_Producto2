@@ -21,6 +21,7 @@ export class PlayersListComponent {
   @Input() sortBy = 'position';
   @Input() selectedId: number | null = null;
   @Output() playerSelected = new EventEmitter<Player>();
+  @Output() playerDeleted = new EventEmitter<Player>();
 
 
   select(player: Player): void {
