@@ -1,1 +1,26 @@
-:host { display: block; }
+:host {
+  display: block;
+}
+
+/* Variante: botón de icono para acciones destructivas */
+.btn-icon-danger {
+  --bs-btn-color: var(--text-secondary);
+  --bs-btn-bg: var(--color-surface);
+  --bs-btn-border-color: var(--color-border);
+  --bs-btn-hover-color: var(--color-danger);
+  --bs-btn-hover-bg: var(--color-danger-bg);
+  --bs-btn-hover-border-color: var(--color-danger-border);
+  --bs-btn-active-color: var(--color-danger);
+  --bs-btn-active-bg: var(--color-danger-bg-active);
+  --bs-btn-active-border-color: var(--color-danger);
+  --bs-btn-focus-shadow-rgb: var(--color-danger-rgb);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-icon-danger > span {
+  display: inline-flex;
+}

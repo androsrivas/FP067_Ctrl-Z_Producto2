@@ -1,1 +1,25 @@
-.card-media { background-color: var(--color-media-placeholder); }
+.card-media {
+  background-color: var(--color-media-placeholder);
+}
+
+/* Posición y visibilidad del botón eliminar (contexto de la tarjeta) */
+.card-delete {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.player-card:hover .card-delete,
+.player-card.selected .card-delete,
+.card-delete:focus-within {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .card-delete {
+        opacity: 1;
+    }
+}

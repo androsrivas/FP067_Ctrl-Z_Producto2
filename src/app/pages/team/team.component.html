@@ -47,7 +47,11 @@
       <h2 class="page-title fs-5 mb-3">Detalle del jugador</h2>
 
       <div class="d-flex flex-column gap-4">
-        <app-player-detail [player]="selectedPlayer" (closed)="selectedId = null"></app-player-detail>
+        <app-player-detail 
+          [player]="selectedPlayer" 
+          (closed)="selectedId = null"
+          (deleteClick)="deletePlayer($event)">
+        </app-player-detail>
 
         <app-player-media [player]="selectedPlayer"></app-player-media>
       </div>

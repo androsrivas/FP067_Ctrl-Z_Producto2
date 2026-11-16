@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../../models/player.model';
+import { ButtonComponent } from '../../atoms/button/button.component';
 import { PlayerMediaComponent } from '../player-media/player-media.component';
 import { StatCardComponent } from '../../atoms/stat-card/stat-card.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,6 +20,7 @@ import { PlayerService } from '../../../services/player.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    ButtonComponent,
     PlayerMediaComponent,
     StatCardComponent,
   ],
@@ -28,6 +30,7 @@ import { PlayerService } from '../../../services/player.service';
 export class PlayerDetailComponent {
   @Input() player: Player | null = null;
   @Output() closed = new EventEmitter<void>();
+  @Output() deleteClick = new EventEmitter<Player>();
 
   private readonly fb = inject(FormBuilder);
   private readonly playerService = inject(PlayerService);
