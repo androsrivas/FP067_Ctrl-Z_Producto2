@@ -1,11 +1,19 @@
-<div class="player-card h-100" [class.selected]="selected" (click)="cardClick.emit(player)">
+<div class="player-card position-relative h-100" [class.selected]="selected" (click)="cardClick.emit(player)">
     <div class="card-media ratio ratio-4x3 rounded-3 overflow-hidden mb-3">
-        <img
-            *ngIf="player.foto"
-            [src]="player.foto"
-            [alt]="player.nombre"
-            class="object-fit-cover" />
+        <img *ngIf="player.foto" [src]="player.foto" [alt]="player.nombre" class="object-fit-cover" />
     </div>
+
+    <app-button class="card-delete" variant="icon-danger"
+        [ariaLabel]="'Eliminar a ' + player.nombre + ' ' + player.apellidos"
+        (onClick)="deleteClick.emit(player); $event.stopPropagation()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 6h18" />
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+        </svg>
+    </app-button>
 
     <h3 class="card-title">
         #{{ player.dorsal }} {{ player.nombre }} {{ player.apellidos }}
@@ -17,13 +25,6 @@
             {{ player.edad }} años · {{ player.altura }} m
         </span>
     </div>
-
-    <button
-    type="button"
-    class="btn btn-outline-danger btn-sm mb-2"
-    (click)="deleteClick.emit(player); $event.stopPropagation()">
-    🗑️ Eliminar
-    </button>
 
     <app-button class="mt-auto">
         Ver detalle
