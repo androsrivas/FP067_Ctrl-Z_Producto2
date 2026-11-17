@@ -1,8 +1,33 @@
-:host {
-  display: block;
+/* Base común de los botones de icono (redondo) */
+.btn-icon,
+.btn-icon-danger {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Variante: botón de icono para acciones destructivas */
+.btn-icon > span,
+.btn-icon-danger > span {
+  display: inline-flex;
+}
+
+/* Variante: icono neutro (cerrar, etc.) */
+.btn-icon {
+  --bs-btn-color: var(--text-secondary);
+  --bs-btn-bg: var(--color-surface);
+  --bs-btn-border-color: var(--color-border);
+  --bs-btn-hover-color: var(--text-heading);
+  --bs-btn-hover-bg: var(--color-media-placeholder);
+  --bs-btn-hover-border-color: var(--text-secondary-dark);
+  --bs-btn-active-color: var(--text-heading);
+  --bs-btn-active-bg: var(--color-border);
+  --bs-btn-active-border-color: var(--text-secondary-dark);
+  --bs-btn-focus-shadow-rgb: var(--color-accent-rgb);
+}
+
+/* Variante: icono para acciones destructivas */
 .btn-icon-danger {
   --bs-btn-color: var(--text-secondary);
   --bs-btn-bg: var(--color-surface);
@@ -14,13 +39,4 @@
   --bs-btn-active-bg: var(--color-danger-bg-active);
   --bs-btn-active-border-color: var(--color-danger);
   --bs-btn-focus-shadow-rgb: var(--color-danger-rgb);
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 50%;
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-icon-danger > span {
-  display: inline-flex;
 }

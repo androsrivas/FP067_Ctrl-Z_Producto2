@@ -1,14 +1,17 @@
-<button 
-    [type]="type" 
-    class="btn d-inline-flex align-items-center justify-content-center gap-2"
-    [class.btn-accent]="variant === 'accent'"
-    [class.btn-icon-danger]="variant === 'icon-danger'"
-    [class.w-100]="fullWidth && variant === 'accent'"
-    [attr.aria-label]="ariaLabel"
-    [attr.title]="ariaLabel" 
+<button [type]="type" [disabled]="disabled" class="btn d-inline-flex align-items-center justify-content-center gap-2"
+    [class.btn-accent]="variant === 'accent'" [class.btn-primary]="variant === 'primary'"
+    [class.btn-outline-secondary]="variant === 'outline'" [class.btn-icon]="variant === 'icon'"
+    [class.btn-icon-danger]="variant === 'icon-danger'" [class.btn-sm]="size === 'sm'"
+    [class.w-100]="fullWidth && variant === 'accent'" [attr.aria-label]="ariaLabel" [attr.title]="ariaLabel"
     (click)="onClick.emit($event)">
+    @if (icon === 'plus') {
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+    </svg>
+    }
     <span><ng-content></ng-content></span>
-        @if (variant === 'accent') {
-            <span  aria-hidden="true">&rarr;</span>
-        }
+    @if (variant === 'accent' && icon == 'arrow') {
+    <span aria-hidden="true">&rarr;</span>
+    }
 </button>

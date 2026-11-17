@@ -23,38 +23,65 @@
 
     <!-- Columna izquierda: lista -->
     <section class="col-12 col-lg-7">
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="section-header">
         <h2 class="page-title fs-5 mb-0">
           Jugadores <app-badge [label]="totalFiltrados"></app-badge>
         </h2>
-        <span class="text-sorting">Ordenados por {{ sortLabel }}</span>
+        <div class="d-flex align-items-center gap-3">
+          <span class="text-sorting">Ordenados por {{ sortLabel }}</span>
+          <app-button 
+            [fullWidth]="false"
+            icon="plus" 
+            (onClick)="startCreate()">
+            Nuevo
+          </app-button>
+        </div>
       </div>
 
-      <app-players-list 
-        [players]="players" 
-        [searchText]="searchText" 
-        [sortBy]="sortBy" 
-        [selectedId]="selectedId" 
-        (playerSelected)="selectedId = $event.id"
-        (playerDeleted)="deletePlayer($event)">
+      <app-players-list [players]="players" [searchText]="searchText" [sortBy]="sortBy" [selectedId]="selectedId"
+        (playerSelected)="selectedId = $event.id; creating = false" (playerDeleted)="deletePlayer($event)">
       </app-players-list>
 
       <p class="text-footer">Mostrando los {{ totalFiltrados }} jugadores de la plantilla</p>
     </section>
 
-    <!-- Columna derecha: detalle + vídeo -->
+    <!-- Columna derecha: detalle + vídeo || formulario creación -->
     <aside class="col-12 col-lg-5">
-      <h2 class="page-title fs-5 mb-3">Detalle del jugador</h2>
+      <div class="section-header">
+        <h2 class="page-title fs-5 mb-3">{{ creating ? 'Nuevo jugador' : 'Detalles' }}</h2>
+      </div>
+      @if (creating) {
+        <div class="player-card gap-3">
+        <div class="d-flex justify-content-between align-content-center">
+          <span class="fw-semibold">Datos del nuevo jugador</span>
+          <app-button 
+            variant="icon" 
+            ariaLabel="Cerrar formulario" 
+            (onClick)="creating = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18" />
+              <path d="M6 6l12 12" />
+            </svg>
+          </app-button>
+        </div>
 
+        @if (createMessage) {
+        <div class="alert py-2 mb-0" [class]="'alert-' + createMessage.type" role="alert">
+          {{ createMessage.text }}
+        </div>
+        }
+        <app-player-form idPrefix="new" submitLabel="Crear jugador" [requirePhoto]="true" [saving]="saving"
+          (formSubmit)="createPlayer($event)" (formCancel)="creating = false">
+        </app-player-form>
+      </div>
+      } @else {
       <div class="d-flex flex-column gap-4">
-        <app-player-detail 
-          [player]="selectedPlayer" 
-          (closed)="selectedId = null"
-          (deleteClick)="deletePlayer($event)">
+        <app-player-detail [player]="selectedPlayer" (closed)="selectedId = null" (deleteClick)="deletePlayer($event)">
         </app-player-detail>
-
         <app-player-media [player]="selectedPlayer"></app-player-media>
       </div>
+      }
     </aside>
 
   </div>
