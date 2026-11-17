@@ -5,6 +5,7 @@ import {
   collection,
   collectionData,
   doc,
+  addDoc,
   updateDoc,
   deleteDoc
 } from '@angular/fire/firestore';
@@ -34,6 +35,12 @@ export class PlayerService {
       playersCollection,
       { idField: 'firebaseId' }
     ) as Observable<Player[]>;
+  }
+
+  async addPlayer(player: Player): Promise<string> {
+    const { firebaseId: _, ...fields } = player;
+    const docRef = await addDoc(collection(this.firestore, 'players'), fields);
+    return docRef.id;
   }
 
   updatePlayer(firebaseId: string, data: Partial<Player>): Promise<void> {
