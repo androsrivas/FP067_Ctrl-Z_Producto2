@@ -6,6 +6,8 @@ import {
   collectionData,
   doc,
   addDoc,
+  getDocs,
+  writeBatch,
   updateDoc,
   deleteDoc
 } from '@angular/fire/firestore';
@@ -41,6 +43,24 @@ export class PlayerService {
     const { firebaseId: _, ...fields } = player;
     const docRef = await addDoc(collection(this.firestore, 'players'), fields);
     return docRef.id;
+  }
+
+  /** Carga inicial: añade a Firestore los jugadores cuyo id aún no existe. */
+  async seedPlayer(players: Player[]): Promise<number> {
+    const playersCollection = collection(this.firestore, 'players');
+    const snapshot = await getDocs(playersCollection);
+    const existingIds = new Set(snapshot.docs.map(d => d.data()['id'] as number));
+
+    const missing = players.filter(p => !existingIds.has(p.id));
+    if (missing.length === 0) return 0;
+
+    const batch = writeBatch(this.firestore);
+    for (const player of missing) {
+      const { firebaseId: _, ...fields } = player;
+      batch.set(doc(playersCollection), fields);
+    }
+    await batch.commit();
+    return missing.length;
   }
 
   updatePlayer(firebaseId: string, data: Partial<Player>): Promise<void> {
