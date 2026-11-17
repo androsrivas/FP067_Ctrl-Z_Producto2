@@ -1,1 +1,12 @@
-<input [type]="type" [placeholder]="placeholder" [value]="value" (input)="onInputChange($event)" class="form-control" />
+<input 
+    [type]="type" 
+    [attr.id]="inputId"
+    [attr.step]="step"
+    [placeholder]="placeholder" 
+    [value]="value ?? ''"
+    [disabled]="disabled"
+    class="form-control"
+    [class.form-control-sm]="size === 'sm'"
+    [class.is-invalid]="invalid" 
+    (input)="onInputChange($event)"
+    (blur)="onTouched()" />
