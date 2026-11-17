@@ -46,9 +46,9 @@
     </section>
 
     <!-- Columna derecha: detalle + vídeo || formulario creación -->
-    <aside class="col-12 col-lg-5">
+    <aside class="col-12 col-lg-5" [class.aside-sticky]="creating || selectedPlayer">
       <div class="section-header">
-        <h2 class="page-title fs-5 mb-3">{{ creating ? 'Nuevo jugador' : 'Detalles' }}</h2>
+        <h2 class="page-title fs-5 mb-0">{{ creating ? 'Nuevo jugador' : 'Detalles' }}</h2>
       </div>
       @if (creating) {
         <div class="player-card gap-3">
