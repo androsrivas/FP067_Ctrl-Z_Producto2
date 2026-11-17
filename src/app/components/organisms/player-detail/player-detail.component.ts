@@ -92,7 +92,7 @@ export class PlayerDetailComponent {
     asistencias: [0, [Validators.required, Validators.min(0)]],
     rebotes: [0, [Validators.required, Validators.min(0)]],
     biografia: [''],
-    foto: ['', Validators.required],
+    foto: [''],
     videoUrl: [''],
   });
 
@@ -139,6 +139,10 @@ export class PlayerDetailComponent {
 
   async save(): Promise<void> {
     if (!this.player?.firebaseId) return;
+
+    if (!this.form.value.foto && !this.imageFile) {
+      this.fileError = 'La foto es obligatoria.';
+    }
 
     if (this.form.invalid || this.fileError) {
       this.form.markAllAsTouched();
