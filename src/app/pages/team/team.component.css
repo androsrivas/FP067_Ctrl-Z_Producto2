@@ -6,3 +6,19 @@
     min-height: 2.75rem;
     margin-bottom: 1rem;
 }
+
+/* Columna derecha fija al hacer scroll (solo escritorio, donde hay 2 columnas) */
+@media (min-width: 992px) {
+    .aside-sticky {
+        position: sticky;
+        top: 1rem;
+        align-self: flex-start;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .aside-sticky::-webkit-scrollbar {
+        display: none;
+    }
+}
