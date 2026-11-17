@@ -67,6 +67,7 @@ get selectedPlayer(): Player | null {
 startCreate(): void {
   this.creating = true;
   this.selectedId = null;
+  this.createMessage = null;
 }
 
 async createPlayer({ data, imageFile, videoFile}: PlayerFormResult): Promise<void> {
