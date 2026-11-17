@@ -1,0 +1,94 @@
+<form 
+    #formEl 
+    [formGroup]="form" 
+    (ngSubmit)="onSubmit()"
+    novalidate
+    class="row g-2 border-top pt-3">
+    <div [class]="f.col" *ngFor="let f of textFields">
+        <label class="form-label small mb-1" [for]="idPrefix + '-' + f.name">{{ f.label }} *</label>
+        <app-input
+            size="sm"
+            [inputId]="idPrefix + '-' + f.name"
+            [formControlName]="f.name"
+            [invalid]="isInvalid(f.name)"></app-input>
+        <div *ngIf="isInvalid(f.name)" class="invalid-feedback d-block">Campo obligatorio.</div>
+    </div>
+
+    <div [class]="f.col" *ngFor="let f of numberFields">
+        <label class="form-label small mb-1" [for]="idPrefix + '-' + f.name">{{ f.label }} *</label>
+        <app-input
+            type="number"
+            size="sm"
+            [step]="f.step"
+            [inputId]="idPrefix + '-' + f.name"
+            [formControlName]="f.name"
+            [invalid]="isInvalid(f.name)"></app-input>
+        <div *ngIf="isInvalid(f.name)" class="invalid-feedback d-block">{{ f.error }}</div>
+    </div>
+
+    <div class="col-12">
+        <label class="form-label small mb-1" [for]="idPrefix + '-posicion'">Posición *</label>
+        <select
+            [id]="idPrefix + '-posicion'"
+            class="form-select form-select-sm"
+            formControlName="posicion"
+            [class.is-invalid]="isInvalid('posicion')">
+            <option value="" disabled>Selecciona una posición.</option>
+            <option *ngFor="let p of posiciones" [value]="p">
+                {{ p }}
+            </option>
+        </select>
+        <div class="invalid-feedback">Selecciona una posición.</div>
+    </div>
+
+    <div class="col-6">
+        <label class="form-label small mb-1" [for]="idPrefix + '-foto'">Foto{{ requirePhoto ? ' *' : '' }}</label>
+        <input 
+            type="file" 
+            [id]="idPrefix + '-foto'"
+            class="form-control form-control-sm"
+            accept="image/*"
+            [class.is-invalid]="photoMissing"
+            (change)="onFileSelected($event, 'image')">
+        <div class="invalid-feedback">La foto es obligatoria.</div>
+        <div *ngIf="initial?.foto && !imageFile" class="form-text text-truncate">Actual: {{ initial?.foto }}</div>
+    </div>
+
+    <div class="col-6">
+        <label class="form-label small mb-1" [for]="idPrefix + '-video'">Vídeo</label>
+        <input 
+            type="file" 
+            [id]="idPrefix + '-video'"
+            class="form-control form-control-sm"
+            accept="video/*"
+            (change)="onFileSelected($event, 'video')">
+        <div *ngIf="initial?.videoUrl && !videoFile" class="form-text text-truncate">Actual: {{ initial?.videoUrl }}</div>
+    </div>
+
+    <div *ngIf="fileError" class="col-12 small text-danger">
+        {{ fileError }}
+    </div>
+
+    <div class="col-12">
+        <label class="form-label small mb-1" [for]="idPrefix + '-biografia'">Biografía</label>
+        <textarea [id]="idPrefix + '-biografia'" rows="3" class="form-control form-control-sm" formControlName="biografia"></textarea>
+    </div>
+
+
+    <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+        <app-button
+            variant="outline"
+            size="sm"
+            [disabled]="saving"
+            (onClick)="formCancel.emit()">
+            Cancelar
+        </app-button>
+        <app-button 
+            type="submit" 
+            variant="primary" 
+            size="sm"
+            [disabled]="saving">
+            {{ saving ? (hasFiles ? 'Subiendo archivos...' : 'Guardando...') : submitLabel }}
+        </app-button>
+    </div>
+</form>
